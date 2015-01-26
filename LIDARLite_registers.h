@@ -49,16 +49,15 @@
 #define LIDAR_READ_DELAY_H  0x57    //Measured delay of reference or signal in correlation window
 #define LIDAR_READ_DELAY_L  0x58    //Measured delay of reference or signal in correlation window
 #define LIDAR_CORR_PEAK_EXT 0x59    //Correlation peak value of reference or signal
-#define LIDAR_TEMP 0x5a    //Correlation record noise floor * 1.25 (for setting valid signal threshold)
-#define LIDAR_TEMP 0x5b    //Received signal strength (typical range 10min - 255 maximum)
-#define LIDAR_TEMP 0x5c    //Reset correlator / increment transmit signal pattern
-#define LIDAR_TEMP 0x5d    //Correlation Data access port (sign bit)
-#define LIDAR_TEMP 0x5e    //Clock synchronizer control
-#define LIDAR_TEMP 0x5f    //Measured transmit power – Supports Laser safety monitoring
-#define LIDAR_TEMP 0x60    //Measured fine delay (used as part of measured delay calculation)
-#define LIDAR_TEMP 0x61    //Coarse delay (used as part of measured delay calculation)
-#define LIDAR_TEMP 0x62    //Coarse delay (used as part of measured delay calculation)
-#define LIDAR_TEMP 0x63    //Positive correlation sample before zero crossing (correlation pulse falling edge)
-#define LIDAR_TEMP 0x64    //Negative correlation sample after zero crossing (correlation pulse falling edge)
-#define LIDAR_TEMP 0x65    //Power control settings
-#define LIDAR_TEMP 0x68    //Velocity measurement window setting register
+#define LIDAR_MAX_NOISE     0x5a    //Correlation record noise floor * 1.25 (for setting valid signal threshold)
+#define LIDAR_RSSI          0x5b    //Received signal strength (typical range 10min - 255 maximum)
+#define LIDAR_CORR_SIG_PAT  0x5c    //Reset correlator / increment transmit signal pattern
+#define LIDAR_CORR_SIGN_BIT 0x5d    //Correlation Data access port (sign bit)
+#define LIDAR_READ_TX_PWR   0x5f    //Measured transmit power – Supports Laser safety monitoring
+#define LIDAR_FINE_DELAY    0x60    //Measured fine delay (used as part of measured delay calculation)
+#define LIDAR_COARSE_DELAY_H 0x61    //Coarse delay (used as part of measured delay calculation)(HIGH Byte)
+#define LIDAR_COARSE_DELAY_L 0x62    //Coarse delay (used as part of measured delay calculation)(LOW Byte)
+#define LIDAR_POS_CROSS     0x63    //Positive correlation sample before zero crossing (correlation pulse falling edge)
+#define LIDAR_NEG_CROSS     0x64    //Negative correlation sample after zero crossing (correlation pulse falling edge)
+#define LIDAR_PWR_CTRL      0x65    //Power control settings
+#define LIDAR_VELOCITY_CTRL 0x68    //Velocity measurement window setting register
