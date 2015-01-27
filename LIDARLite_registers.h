@@ -1,6 +1,10 @@
 
 #pragma once
 
+//DEFAULT I2C ADDRESS
+#define LIDARLite_ADDRESS   0x62
+
+
 //INTERNAL REGISTERS
 
 #define LIDAR_COMMAND       0x0   //Command Register

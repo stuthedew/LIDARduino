@@ -1,6 +1,6 @@
 
-#include "LIDARduino.h"
-#include "LIDARLite_registers.h"
+#include <LIDARduino1.h>
+#include <LIDARLite_registers.h>
 
 
 void setup(){

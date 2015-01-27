@@ -11,4 +11,16 @@ v0.0.1 - First release
 */
 /**************************************************************************/
 
-#include LIDARduino.h
+#include "LIDARduino1.h"
+
+
+LIDAR::LIDAR(){
+
+  _I2CAddress = LIDARLite_ADDRESS ;
+
+}
+
+void LIDAR::begin( void ){
+
+
+}

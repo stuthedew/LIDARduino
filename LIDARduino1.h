@@ -15,3 +15,28 @@ v0.0.1 - First release
 
 #include "Arduino.h"
 #include "LIDARLite_registers.h"
+#include <I2C.h>
+
+
+class LIDAR{
+
+  LIDAR() ;
+
+  void
+    begin( void ) ;
+
+  /***********PUBLIC*************************/
+
+
+
+
+  /***********PRIVATE*************************/
+
+
+  uint8_t
+    _I2CAddress ;
+
+  
+
+
+};
