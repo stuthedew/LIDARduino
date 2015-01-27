@@ -20,23 +20,36 @@ v0.0.1 - First release
 
 class LIDAR{
 
-  LIDAR() ;
+  /***********PUBLIC*************************/
+  LIDAR(),
+  LIDAR( uint8_t i2cAddr );
 
   void
     begin( void ) ;
 
-  /***********PUBLIC*************************/
+  int
+    getDistance( void ) ,
+    getVelocity( void ) ;
+
+
 
 
 
 
   /***********PRIVATE*************************/
 
-
   uint8_t
+    _readI2C( uint8_t regAddress, int numBytes, uint8_t destAry[2] ) ;
+
+  void
+    _writeI2C( uint8_t regAddress, uint8_t value ) ;
+
+
+
+  uint8_t const
     _I2CAddress ;
 
-  
+
 
 
 };
