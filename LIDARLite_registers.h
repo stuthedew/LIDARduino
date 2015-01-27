@@ -7,10 +7,37 @@
 
 //INTERNAL REGISTERS
 
-#define LIDAR_COMMAND       0x0   //Command Register
-#define LIDAR_SYS_STATUS    0x1   //Status system status.
+//Command Register
+#define LIDAR_COMMAND       0x0
+
+#define RESET_FPGA          0   // Reset FPGA. Re-loads FPGA from internal Flash memory – all registers return to default values
+#define PROCESS_2ND         1   // Correlation processing without new acquisition – used to process delay of second peak after bit 0 in control register  0x4b is set to 1
+#define REPROCESS           2   // Process correlation without new acquisition – used to reprocess
+#define NO_DC               3   // Take acquisition& correlation processing WITHOUT DC correction
+#define USE_DC              4   // Take acquisition & correlation processing WITH DC correction
+/*END REGISTER*/
+
+//Status system status.
+#define LIDAR_SYS_STATUS    0x1 // Status system status.
+
+#define HEALTH              0   // “1” state indicates that all health monitoring criteria were met on the last acquisition. ”0” possible problem
+#define REF_OVRFLOW         1   // Overflow detected in correlation process associated with a reference acquisition
+#define SIG_OVERFLOW        2   // Overflow detected in correlation process associated with a signal acquisition
+#define SIGNAL_NOT_VALID    3   // Indicates that the signal correlation peak is equal to or below correlation record noise threshold
+#define SECOND_RETURN       4   // Secondary return detected above correlation noise floor threshold
+#define VELOCITY_COMPLETE   5   // Velocity measurement completed
+#define EXT_TRIG_COMPLETE   6   // External measurement performed
+#define EYE_SAFE            7   // This bit will go high if eye-safety protection has been activated
+/*END REGISTER*/
+
+
 #define LIDAR_MAX_COUNT     0x2   //Maximum acquisition count
-#define LIDAR_CORR_LENGTH   0x3   //Correlation record length setting
+
+//Bits 0 - 7    Maximum Acquisition Count - 0-255.  Control the FPGA maximum signal integration time.  Stronger signal results in reduced  acquisition count to prevent internal register overflow.  Sig overflow flag and Ref overflow flag in control register 1 are set  when automatic limiting occurs.
+/*END REGISTER*/
+
+
+//#define LIDAR_CORR_LENGTH   0x3   //Correlation record length setting (Same as 0x51?)
 #define LIDAR_MODE          0x4   //Acquisition mode control
 #define LIDAR_THOLD_OFFSET  0x5   //Measured threshold offset during acquisition
 #define LIDAR_REF_DELAY_H   0x6   //Measured delay of reference in correlation record (HIGH byte)
