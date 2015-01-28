@@ -1,12 +1,25 @@
 #include "LIDARduino1.h"
 #include <I2C.h>
 
-void setup(){
+LIDAR_Lite_I2C l;
 
+void setup(){
+  Serial.begin(115200);
+  while (!Serial) ;
+
+  l.begin();
+  Serial.println(F("Starting LIDAR Test..."));
+
+  Serial.print(F("Hardware Version: 0x"));
+  Serial.println( l.getHWversion() );
+  Serial.print(F("Software Version: 0x"));
+  Serial.println( l.getHWversion() );
 
 }
 
 void loop(){
 
+Serial.println(l.getDistance());
+delay(2);
 
 }
