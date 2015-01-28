@@ -14,11 +14,12 @@ void setup(){
   Serial.println( l.getHWversion() );
   Serial.print(F("Software Version: 0x"));
   Serial.println( l.getHWversion() );
-
+  l.enableVelocity( LL_10_MS );
 
 }
 
 void loop(){
+
 
 Serial.println(l.getVelocity());
 delay(500);
