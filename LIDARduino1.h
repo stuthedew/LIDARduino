@@ -18,11 +18,17 @@ v0.0.1 - First release
 #include <I2C.h>
 
 typedef enum{
-  LL_Basic,
-  LL_Advanced
+  LL_DC = USE_DC, //Correct for DC (More accurate)
+  LL_NO_DC = NO_DC //Don't correct (Faster)
 
-} LIDAR_LITE_MODE_E;
+} LL_READ_MODE_E;
 
+
+typedef enum{
+  LL_10_MS = 1, // sets the velocity measurement separation to 10msec resulting in a velocity calibration in meters/sec
+  LL_100_MS = 0 // sets the  measurement separation to 100msec.
+
+} LL_V_RESOLUTION_E;
 
 class LIDAR_Lite{
   public:
@@ -36,30 +42,28 @@ class LIDAR_Lite{
       powerStatus( void ) const ;
 
       /*Example
-          #define NUM_SENSORS 4
-          LIDAR_Lite_I2C sensors[ NUM_SENSORS ]; // Could be LIDAR_Lite_PWM also
-          uint8_t sensorCtrlPins[] = {6, 7, 8, 9};
+        #define NUM_SENSORS 4  //Number of LIDAR_Lites to read.
+        LIDAR_Lite_I2C sensors[ NUM_SENSORS ]; // Could be LIDAR_Lite_PWM also
+        uint8_t sensorPwrPins[] = {6, 7, 8, 9}; // Hook up each arduino pin to each PWR_EN wire of LIDAR Lites (PWR_EN wire adjacent to Red 5V wire ) using 1K - 10K resistor in series.
 
-          for(int i = 0; i < NUM_SENSORS; i++){ // disable all sensors
-            sensors[i].begin();
-            sensors[i].enablePowerCtrl( sensorPins[i] );
-            sensors[i].power(0);
-          }
+        for(int i = 0; i < NUM_SENSORS; i++){ // disable all sensors
+          sensors[i].begin();
+          sensors[i].enablePowerCtrl( sensorPwrPins[i] );
+          sensors[i].power(0);
+        }
 
-          for(int i = 0; i < NUM_SENSORS; i++){ // Read from each sensor individually
-            sensors[i].power(1); //enable individual sensor
+        for(int i = 0; i < NUM_SENSORS; i++){ // Read from each sensor individually
+          sensors[i].power(1); //enable individual sensor
 
-            Serial.print(F("Sensor "));
-            Serial.print(i);
-            Serial.print(F(" Distance Reading: "));
-            Serial.print(sensors[i].getDistance);
-            Serial.println(F("cm"));
+          Serial.print(F( Sensor  ));
+          Serial.print(i);
+          Serial.print(F(  Distance Reading:  ));
+          Serial.print(sensors[i].getDistance());
+          Serial.println(F( cm ));
 
-            sensors[i].power(0); //disable individual sensor
-          }
+          sensors[i].power(0); //disable individual sensor
+        }
       */
-
-
 
 
   private:
@@ -89,30 +93,32 @@ public:
 
 
   uint8_t
-    getHWversion( void ) ,
-    getSWversion ( void ) ;
+    getHWversion( void ) , // laser units revisions begin with 0x01 (short range ), 0x20 for long range lasers, and Led units begin with 0x40
+    getSWversion( void ) ; // laser units revisions begin with 0x01 (short range ), 0x20 for long range lasers, and Led units begin with 0x40
 
-
+  void
+    enableVelocity( LL_V_RESOLUTION_E e) ,
+    disableVelocity( void ) ;
 
 
   /***********PRIVATE*************************/
 private:
 
   uint8_t
-    _readI2C( uint8_t regAddress );
+    _readI2C( uint8_t regAddress ); //read single byte
 
   void
-    _readI2C( uint8_t regAddress, int16_t numBytes, uint8_t destAry[] ),
-    _writeI2C( uint8_t regAddress, uint8_t value );
+    _readI2C( uint8_t regAddress, int16_t numBytes, uint8_t destAry[] ), //read array of bytes
+    _writeI2C( uint8_t regAddress, uint8_t value ),
+    _overWriteI2C( uint8_t regAddress, uint8_t value );
 
+  inline void
+    _triggerRead( LL_READ_MODE_E e = LL_DC ) ;
 
 
   uint8_t const
     _I2CAddress ;
 
-
-  LIDAR_LITE_MODE_E
-      _mode;
 
 
 };

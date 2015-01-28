@@ -50,7 +50,7 @@ void LIDAR_Lite_I2C::begin( void ){
 
 int16_t LIDAR_Lite_I2C::getDistance( void ){
 
-  _writeI2C( LIDAR_COMMAND, (1 << USE_DC) );
+  _triggerRead();
 
   uint8_t readAry[2];
   _readI2C(LIDAR_DIST_READ_HL, 2, readAry);
@@ -58,10 +58,42 @@ int16_t LIDAR_Lite_I2C::getDistance( void ){
   return distance;
 }
 
-int16_t LIDAR_Lite_I2C::getVelocity( void ){
-  uint8_t readAry[1];
+/* ==========================================================================================================================================
+Get raw velocity readings from sensor and convert to signed int
+=============================================================================================================================================*/
 
-  return((int)((char)readAry[0]));
+/*
+int llGetVelocity(){
+  llWriteAndWait(0x00,0x04); // Write 0x04 to register 0x00 to start getting distance readings
+  llWriteAndWait(0x04,0x80); // Write 0x80 to 0x04 to switch on velocity mode
+  byte myArray[1]; // Array to store bytes from read function
+  llReadAndWait(0x09,1,myArray); // Read 1 byte from register 0x09 to get velocity measurement
+  return((int)((char)myArray[0])); // Convert 1 byte to char and then to int to get signed int value for velocity measurement
+}
+*/
+
+int16_t LIDAR_Lite_I2C::getVelocity( void ){
+  _triggerRead();
+  enableVelocity( LL_10_MS );
+
+  uint8_t read = _readI2C(LIDAR_VELOCITY_READ);
+  disableVelocity();
+
+  return((int)((char)read));
+}
+
+void LIDAR_Lite_I2C::enableVelocity( LL_V_RESOLUTION_E e ){
+  uint8_t tempReg = ( 1 << e ) | ( 1 << V_ENABLE ); // set Velocity scale factor (e) and enable velocity measurement
+  _writeI2C( LIDAR_MODE, tempReg ); //enable velocity mode;
+
+}
+
+void LIDAR_Lite_I2C::disableVelocity( void ){
+  uint8_t tempReg = _readI2C( LIDAR_MODE ); //get current Mode settings
+  tempReg &= ~( 1 << V_ENABLE ); // clear Velocity enable bit
+  _overWriteI2C( LIDAR_MODE, tempReg );
+
+
 }
 
 uint8_t LIDAR_Lite_I2C::getHWversion( void ) {
@@ -95,6 +127,14 @@ void LIDAR_Lite_I2C::_readI2C( uint8_t regAddress, int16_t numBytes, uint8_t des
 
 
 void LIDAR_Lite_I2C::_writeI2C( uint8_t regAddress, uint8_t value ){
+
+  uint8_t tempReg = _readI2C(regAddress);
+  tempReg |= value;
+  _overWriteI2C(regAddress, tempReg);
+
+}
+
+void LIDAR_Lite_I2C::_overWriteI2C( uint8_t regAddress, uint8_t value ){
   uint8_t nackack = 100;
   while(nackack != 0){
     nackack = I2c.write(_I2CAddress, regAddress, value ); // Write to LIDAR-Lite Address with Value
@@ -102,6 +142,11 @@ void LIDAR_Lite_I2C::_writeI2C( uint8_t regAddress, uint8_t value ){
   }
 }
 
+inline void LIDAR_Lite_I2C::_triggerRead( LL_READ_MODE_E e ){
+  _writeI2C( LIDAR_COMMAND, (1 << e) );
+
+
+}
 
 LIDAR_Lite_PWM::LIDAR_Lite_PWM( uint8_t trigPin, uint8_t readPin ):_triggerPin( trigPin ), _readPin( readPin ){
 }

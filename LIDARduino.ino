@@ -15,11 +15,12 @@ void setup(){
   Serial.print(F("Software Version: 0x"));
   Serial.println( l.getHWversion() );
 
+
 }
 
 void loop(){
 
-Serial.println(l.getDistance());
-delay(2);
+Serial.println(l.getVelocity());
+delay(500);
 
 }
