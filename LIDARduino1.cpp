@@ -58,28 +58,29 @@ int16_t LIDAR_Lite_I2C::getDistance( void ){
   return distance;
 }
 
+int16_t LIDAR_Lite_I2C::easyDistance( void ){
+
+  return getDistance();
+}
+
 /* ==========================================================================================================================================
 Get raw velocity readings from sensor and convert to signed int
 =============================================================================================================================================*/
 
-/*
-int llGetVelocity(){
-  llWriteAndWait(0x00,0x04); // Write 0x04 to register 0x00 to start getting distance readings
-  llWriteAndWait(0x04,0x80); // Write 0x80 to 0x04 to switch on velocity mode
-  byte myArray[1]; // Array to store bytes from read function
-  llReadAndWait(0x09,1,myArray); // Read 1 byte from register 0x09 to get velocity measurement
-  return((int)((char)myArray[0])); // Convert 1 byte to char and then to int to get signed int value for velocity measurement
-}
-*/
 
 int16_t LIDAR_Lite_I2C::getVelocity( void ){
   _triggerRead();
-  enableVelocity( LL_10_MS );
-
   uint8_t read = _readI2C(LIDAR_VELOCITY_READ);
-  disableVelocity();
 
   return((int)((char)read));
+}
+
+int16_t LIDAR_Lite_I2C::easyVelocity( void ){
+  enableVelocity( LL_10_MS );
+  int velocity = getVelocity();
+  disableVelocity();
+
+  return(velocity);
 }
 
 void LIDAR_Lite_I2C::enableVelocity( LL_V_RESOLUTION_E e ){

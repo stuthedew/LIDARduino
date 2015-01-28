@@ -89,7 +89,9 @@ public:
 
   int16_t
     getDistance( void ) , // return distance in cm.
-    getVelocity( void ) ;
+    getVelocity( void ) ,
+    easyDistance( void ) ,
+    easyVelocity( void );
 
 
   uint8_t
