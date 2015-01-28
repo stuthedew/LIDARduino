@@ -8,6 +8,7 @@ Arduino Library for the LIDAR-Lite from PulsedLight, Inc.
 
 @section  HISTORY
 v0.0.1 - First release
+
 */
 /**************************************************************************/
 
