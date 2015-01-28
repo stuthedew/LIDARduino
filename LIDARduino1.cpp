@@ -21,7 +21,7 @@ void LIDAR_Lite::enablePowerCtrl( uint8_t powerPin ){
 }
 
 bool LIDAR_Lite::power( bool state ){
-  if( _powerPin != 255 ){
+  if( _powerPin != 255 ){             // make sure power control pin has been set using enablePowerCtrl.
     _pwrState = state;
     digitalWrite( _powerPin, _pwrState );
     return 1;
@@ -146,8 +146,6 @@ void LIDAR_Lite_I2C::_overWriteI2C( uint8_t regAddress, uint8_t value ){
 
 inline void LIDAR_Lite_I2C::_triggerRead( LL_READ_MODE_E e ){
   _writeI2C( LIDAR_COMMAND, (1 << e) );
-
-
 }
 
 LIDAR_Lite_PWM::LIDAR_Lite_PWM( uint8_t trigPin, uint8_t readPin ):_triggerPin( trigPin ), _readPin( readPin ){
@@ -167,7 +165,7 @@ unsigned long LIDAR_Lite_PWM::getDistance( void ){
 
   if(pulse_width != 0){
 
-  return (pulse_width / 10 ); // 10usec = 1 cm of distance for LIDAR-Lite
+  return ( pulse_width / 10 ); // 10usec = 1 cm of distance for LIDAR-Lite
   }
   return 0;
 }
