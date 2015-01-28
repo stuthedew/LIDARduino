@@ -41,7 +41,7 @@
 #define LIDAR_MODE          0x4   //Acquisition mode control
 #define LIDAR_THOLD_OFFSET  0x5   //Measured threshold offset during acquisition
 #define LIDAR_REF_DELAY_H   0x6   //Measured delay of reference in correlation record (HIGH byte)
-#define LIDAR_REF_DELAY_H   0x7   //Measured delay of reference in correlation record (LOW byte)
+#define LIDAR_REF_DELAY_L   0x7   //Measured delay of reference in correlation record (LOW byte)
 #define LIDAR_REF_PEAK      0x8   //Reference correlation measured peak value
 #define LIDAR_VELOCITY_READ 0x9   //Velocity Measurement Output
 #define LIDAR_CORR_DELAY_H  0xa   //Measured delay of signal return in correlation record (HIGH byte)
@@ -51,7 +51,7 @@
 #define LIDAR_SIG_STRENGTH  0xe   //Received signal strength (typical range 10 min - 128 maximum)
 #define LIDAR_DIST_READ_H   0xf   //Calculated distance in cm (difference between signal and reference delay) (HIGH Byte)
 #define LIDAR_DIST_READ_L   0x10  //Calculated distance in cm (difference between signal and reference delay) (LOW Byte)
-#define LIDAR_DISTANCE_READ 0x8f  //Two byte read (Distance High and LOW)
+#define LIDAR_DIST_READ_HL  0x8f  //Two byte read (Distance High and LOW)
 #define LIDAR_DC_THRESHOLD  0x11  //DC threshold command value
 #define LIDAR_BURST_DELAY   0x12  //Added delay to reduce signal acquisition burst frequency
 #define LIDAR_DISTANCE_CAL  0x13  //Distance calibration. Signed 8 bit value adds or subtracts from distance
