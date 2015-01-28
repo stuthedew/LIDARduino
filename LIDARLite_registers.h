@@ -39,6 +39,16 @@
 
 //#define LIDAR_CORR_LENGTH   0x3   //Correlation record length setting (Same as 0x51?)
 #define LIDAR_MODE          0x4   //Acquisition mode control
+
+#define PREAMP_OFF          0     //Shutdown preamp between measurements
+//#define CLK_SHUT            1   //External Clock Shutdown – Not used in standard LidarLite
+#define FPGA_SLEEP          2   //Full FPGA sleep after measurement
+#define DET_OFF             3   //Turns off detector bias after measurement
+// bit 4 not currently used
+#define V_SCALE             5   //“1” sets the velocity measurement separation to 10msec resulting in a velocity calibration in meters/sec. A “0” value results  in a measurement separation of 100msec.
+#define REF_INHIBIT         6 // If “1” inhibits the acquisition of reference pulses reducing measurement times and reducing measurement variations at the  expense of decreasing accuracy over time. “0” allows normal operation
+#define V_ENABLE            7   // Enable velocity measurement
+
 #define LIDAR_THOLD_OFFSET  0x5   //Measured threshold offset during acquisition
 #define LIDAR_REF_DELAY_H   0x6   //Measured delay of reference in correlation record (HIGH byte)
 #define LIDAR_REF_DELAY_L   0x7   //Measured delay of reference in correlation record (LOW byte)
