@@ -22,7 +22,8 @@ v0.0.1 - First release
 #define LIDARLite_ADDRESS   0x62
 
 
-//INTERNAL REGISTERS
+/*####################INTERNAL REGISTERS######################*/
+
 
 /**************************************************************/
 /*                COMMAND CONTROL REGISTER                    */
@@ -85,10 +86,19 @@ v0.0.1 - First release
 /*                     (READ & WRITE)                         */
 /**************************************************************/
 
-// Same as control_reg[0x51]?
+// control_reg[0x51] is WRITE only version of register
 
 #define LIDAR_CORR_LENGTH   0x3   // Register Address
   /*Bit definitions*/
+  #define CORR_START_ADDR   0      // Value in the range from 0x00-0x0f – starting point in correlation record (record broken into 64 element segments 1024 total (Default "1" corresponding to 64)
+  #define CORR_STOP_ADDR    4     // Value in the range from 0x00-0x0f – stopping point in correlation record (Default "5" corresponding to 512) TODO: Makesure that's not a typo. 8 * 64 corresponds to 512?
+
+/*
+Note: With longer correlation records, burst pulse period is
+roughly proportional to the length of the  correlation record.
+Unnecessarily long record length increases the probability of
+false detections.
+*/
 
 /*------------------------END REGISTER------------------------*/
 
@@ -131,7 +141,7 @@ v0.0.1 - First release
 
 /**************************************************************/
 /*       MEASURED REFERENCE CORRELATION DELAY REGISTERS       */
-/*                    control_reg[0x6 - 7]                    */
+/*                    control_reg[0x6-7]                      */
 /*                     (READ & WRITE)                         */
 /**************************************************************/
 
@@ -145,13 +155,26 @@ v0.0.1 - First release
 /**************************************************************/
 /*          REFERENCE PEAK CORRELATION VALUE REGISTER         */
 /*                    control_reg[0x8]                        */
-/*                     (READ & WRITE)                         */
+/*                       (READ ONLY)                          */
 /**************************************************************/
 
-#define LIDAR_REF_PEAK      0x8   //Reference correlation measured peak value
+#define LIDAR_REF_PEAK      0x8   // Reference correlation measured peak value
+  //BITS 1-7 Correlation Peak value reference (scaled to 0 – 0xff max peak value) - (read only)  – Parameter used as part of health flag criteria
 
 
-#define LIDAR_VELOCITY_READ 0x9   //Velocity Measurement Output
+/*------------------------END REGISTER------------------------*/
+
+
+
+/**************************************************************/
+/*            VELOCITY MEASURMENT OUTPUT REGISTER             */
+/*                    control_reg[0x9]                        */
+/*                       (READ ONLY)                          */
+/**************************************************************/
+
+#define LIDAR_VELOCITY_READ 0x9   // Velocity in .1 meters/sec - (read only, 8 bit signed value) See Mode control, Register 4 for information on changing the  scale factor to 1m/sec 
+
+
 #define LIDAR_CORR_DELAY_H  0xa   //Measured delay of signal return in correlation record (HIGH byte)
 #define LIDAR_CORR_DELAY_L  0xb   //Measured delay of signal return in correlation record (LOW byte)
 #define LIDAR_CORR_PEAK     0xc   //Signal correlation measured peak value
@@ -167,9 +190,9 @@ v0.0.1 - First release
 #define LIDAR_PREV_DIST_L   0x15  //Previous measured distance (LOW Byte)
 
 
-//EXTERNAL REGISTERS
+/*####################EXTERNAL REGISTERS######################*/
 
-#define LIDAR_CMD_CTRL      0x40  //Command Control
+#define LIDAR_CMD_CTRL      0x40    //Command Control
 #define LIDAR_HW_VER        0x41    //Hardware Version
 #define LIDAR_PREAMP_CTRL   0x42    //Preamp DC control
 #define LIDAR_TX_PWR_CTRL   0x43    //Transmit power control
