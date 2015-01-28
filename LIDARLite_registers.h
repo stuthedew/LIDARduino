@@ -15,7 +15,11 @@ v0.0.1 - First release
 
 #pragma once
 
+<<<<<<< HEAD
 //TODO: Finish adding bit definitions and descriptions
+=======
+//TODO: Finish Adding bit definitions and descriptions
+>>>>>>> master
 //TODO: Clean up file and make more readable
 
 //DEFAULT I2C ADDRESS
@@ -175,6 +179,17 @@ false detections.
 #define LIDAR_VELOCITY_READ 0x9   // Velocity in .1 meters/sec - (read only, 8 bit signed value) See Mode control, Register 4 for information on changing the  scale factor to 1m/sec 
 
 
+<<<<<<< HEAD
+=======
+
+
+
+#define LIDAR_THOLD_OFFSET  0x5   //Measured threshold offset during acquisition
+#define LIDAR_REF_DELAY_H   0x6   //Measured delay of reference in correlation record (HIGH byte)
+#define LIDAR_REF_DELAY_L   0x7   //Measured delay of reference in correlation record (LOW byte)
+#define LIDAR_REF_PEAK      0x8   //Reference correlation measured peak value
+#define LIDAR_VELOCITY_READ 0x9   //Velocity Measurement Output
+>>>>>>> master
 #define LIDAR_CORR_DELAY_H  0xa   //Measured delay of signal return in correlation record (HIGH byte)
 #define LIDAR_CORR_DELAY_L  0xb   //Measured delay of signal return in correlation record (LOW byte)
 #define LIDAR_CORR_PEAK     0xc   //Signal correlation measured peak value
