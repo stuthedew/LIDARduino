@@ -345,7 +345,7 @@ VALUE     |       DESCRITPTION                       |
  011      | Start processes at clear correlation     |
           | memory                                   |
 -----------------------------------------------------
- 100      | Start processes at Perform Corelation    |
+ 100      | Start processes at Perform Correlation   |
           | process                                  |
 -----------------------------------------------------
  101      | Start processes at Delay calculation     |
