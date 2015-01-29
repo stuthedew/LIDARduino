@@ -15,11 +15,9 @@ v0.0.1 - First release
 
 #pragma once
 
-<<<<<<< HEAD
-//TODO: Finish adding bit definitions and descriptions
-=======
+
 //TODO: Finish Adding bit definitions and descriptions
->>>>>>> master
+
 //TODO: Clean up file and make more readable
 
 //DEFAULT I2C ADDRESS
@@ -324,8 +322,78 @@ Note: calculation based on the number of averaged samples and correlation peak v
 
 /*####################EXTERNAL REGISTERS######################*/
 
+
+/**************************************************************/
+/*               COMMAND AND CONTROL REGISTER                 */
+/*                     control_reg[0x40]                      */
+/*                          (WRITE)                           */
+/**************************************************************/
+
 #define LIDAR_CMD_CTRL      0x40    // Command Control
+
+/*
+BITS 0-2: Starting action address
+_____________________________________________________
+VALUE     |       DESCRITPTION                       |
+-----------------------------------------------------
+ ￼000      | No Operation                             |
+-----------------------------------------------------
+￼ 001      | Start processes at template store        |
+-----------------------------------------------------
+ 010      | Start processes at signal acquisition    |
+-----------------------------------------------------
+ 011      | Start processes at clear correlation     |
+          | memory                                   |
+-----------------------------------------------------
+ 100      | Start processes at Perform Corelation    |
+          | process                                  |
+-----------------------------------------------------
+ 101      | Start processes at Delay calculation     |
+          | processing                               |
+-----------------------------------------------------
+ 110      | Perform only memory bank access enable   |
+-----------------------------------------------------
+ 111      | Perform only correlation record filtering|
+-----------------------------------------------------
+*/
+
+//BIT 3
+  #define STORE_TEMPLATE      3 // Store template pattern enable
+
+//BIT 4
+  #define SIGNAL_AQ_ENABLE    4 // Signal acquisition enable
+
+//BIT 5
+  #define CLR_CORR_MEM        5 // Clear Correlation Memory
+
+//BIT 6
+  #define RUN_CORR            6 // Perform Correlation process
+
+//BIT 7
+  #define RUN_DELAY_CALC      7 // Perform Delay calculation Processing
+
+/*
+NOTE: Command control register - Writing to this register
+through the I2C interface immediately initiates a command
+operation. Thus it is important to initiate this command
+only at the completion of defining other registers.
+*/
+
+/*------------------------END REGISTER------------------------*/
+
+
+
+/**************************************************************/
+/*                 HARDWARE VERSION REGISTER                  */
+/*                     control_reg[0x41]                      */
+/*                          (READ)                            */
+/**************************************************************/
+
 #define LIDAR_HW_VER        0x41    // Hardware Version
+
+/*------------------------END REGISTER------------------------*/
+
+
 #define LIDAR_PREAMP_CTRL   0x42    // Preamp DC control
 #define LIDAR_TX_PWR_CTRL   0x43    // Transmit power control
 #define LIDAR_GATE_L        0x44    // Processing range gate (low byte)
