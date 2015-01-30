@@ -4,7 +4,9 @@
 @author   Stuart Feichtinger
 @license  MIT (see license.txt)
 
-Arduino Library for the LIDAR-Lite from PulsedLight, Inc.
+Arduino Library for the LIDAR-Lite from PulsedLight, Inc. Register
+descriptions and notes from LIDAR-Lite Operating Manual by PulsedLight
+Rev. 12/2/2014.
 
 @section  HISTORY
 v0.0.1 - First release
@@ -326,7 +328,7 @@ Note: calculation based on the number of averaged samples and correlation peak v
 /**************************************************************/
 /*               COMMAND AND CONTROL REGISTER                 */
 /*                     control_reg[0x40]                      */
-/*                          (WRITE)                           */
+/*                       (WRITE ONLY)                         */
 /**************************************************************/
 
 #define LIDAR_CMD_CTRL      0x40    // Command Control
@@ -386,18 +388,70 @@ only at the completion of defining other registers.
 /**************************************************************/
 /*                 HARDWARE VERSION REGISTER                  */
 /*                     control_reg[0x41]                      */
-/*                          (READ)                            */
+/*                       (READ ONLY)                          */
 /**************************************************************/
 
 #define LIDAR_HW_VER        0x41    // Hardware Version
+/*
+BITS 0-7: Laser units revisions begin with 0x01 (short range),
+          0x20 for long range lasers, and led units begin with 0x40
+*/
 
 /*------------------------END REGISTER------------------------*/
 
 
-#define LIDAR_PREAMP_CTRL   0x42    // Preamp DC control
-#define LIDAR_TX_PWR_CTRL   0x43    // Transmit power control
+
+/**************************************************************/
+/*                 PREAMP DC CONTROL REGISTER                 */
+/*                     control_reg[0x42]                      */
+/*                        (WRITE ONLY)                        */
+/**************************************************************/
+
+#define LIDAR_PREAMP_CTRL   0x42
+//BITS 0-7:  Preamp DC control 0-255 – used in DC compensation servo loop
+
+
+/*------------------------END REGISTER------------------------*/
+
+
+
+/**************************************************************/
+/*               TRANSMIT POWER CONTROL REGISTER              */
+/*                     control_reg[0x43]                      */
+/*                        (WRITE ONLY)                        */
+/*                        default 0x69                        */
+/**************************************************************/
+
+#define LIDAR_TX_PWR_CTRL   0x43
+  // BITS 0-3: Signal laser or led power level control (0x00-0x0f)
+  // BITS 4-7: Reference  led power level control (0x00-0x0f)
+
+/* NOTE: Maximum value set at factory 1amp LED and 3amps Laser
+         product. The maximum output power of the optical source
+         is set through a factory selected resistor which limits
+         available current to the transmit source. When using laser
+         devices, which have a much higher operating current, do not
+         increase the reference control level beyond the factory
+         settings. Increasing the reference control level may cause
+         premature failure of the internal LED reference diode.
+*/
+
+/*------------------------END REGISTER------------------------*/
+
+
+
+/**************************************************************/
+/*               PROCESSING RANGE GATE REGISTERS              */
+/*                   control_reg[0x44-0x45]                   */
+/*                        (WRITE ONLY)                        */
+/**************************************************************/
+
+
 #define LIDAR_GATE_L        0x44    // Processing range gate (low byte)
 #define LIDAR_GATE_H        0x45    // Processing range gate (high byte)
+
+
+
 #define LIDAR_PWM_MODE      0x46    // Range Measurement PWM output pin bit[0] used
 #define LIDAR_READ_STATUS   0x47    // Acquisition status
 #define LIDAR_DC_OFFSET     0x49    // Measured preamp DC offset
