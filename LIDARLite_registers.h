@@ -37,11 +37,28 @@ v0.0.1 - First release
 #define LIDAR_COMMAND       0x0   // Register Address
 
   /*Bit definitions*/
-  #define RESET_FPGA          0   // Reset FPGA. Re-loads FPGA from internal Flash memory – all registers return to default values
-  #define PROCESS_2ND         1   // Correlation processing without new acquisition – used to process delay of second peak after bit 0 in control register  0x4b is set to 1
-  #define REPROCESS           2   // Process correlation without new acquisition – used to reprocess
-  #define NO_DC               3   // Take acquisition& correlation processing WITHOUT DC correction
-  #define USE_DC              4   // Take acquisition & correlation processing WITH DC correction
+
+  #define RESET_FPGA          0
+  //  Reset FPGA. Re-loads FPGA from internal Flash memory
+  //  (all registers return to default values)
+
+
+  #define PROCESS_2ND         1
+  //  Correlation processing without new acquisition – used to process delay of
+  //    second peak after bit 0 in control register 0x4b is set to "1"
+
+
+  #define REPROCESS           2
+  //  Process correlation without new acquisition (used to reprocess)
+
+
+  #define NO_DC               3
+  //  Take acquisition & correlation processing WITHOUT DC correction
+
+
+  #define USE_DC              4
+  //  Take acquisition & correlation processing WITH DC correction
+
 
 /*------------------------END REGISTER------------------------*/
 
@@ -53,17 +70,43 @@ v0.0.1 - First release
 /*                     (READ & WRITE)                         */
 /**************************************************************/
 
-#define LIDAR_SYS_STATUS    0x1   //Register Address
+#define LIDAR_SYS_STATUS    0x1     //  Register Address
 
   /*Bit definitions*/
-  #define HEALTH              0   // “1” state indicates that all health monitoring criteria were met on the last acquisition. ”0” possible problem. SEE NOTE BELOW
-  #define REF_OVRFLOW         1   // Overflow detected in correlation process associated with a reference acquisition
-  #define SIG_OVERFLOW        2   // Overflow detected in correlation process associated with a signal acquisition
-  #define SIGNAL_NOT_VALID    3   // Indicates that the signal correlation peak is equal to or below correlation record noise threshold
-  #define SECOND_RETURN       4   // Secondary return detected above correlation noise floor threshold
-  #define VELOCITY_COMPLETE   5   // Velocity measurement completed
-  #define EXT_TRIG_COMPLETE   6   // External measurement performed
-  #define EYE_SAFE            7   // This bit will go high if eye-safety protection has been activated
+  #define HEALTH                0
+  //  “1” state indicates that all health monitoring criteria were met on the
+  //  last acquisition. ”0” == possible problem. SEE NOTE BELOW
+
+
+  #define REF_OVRFLOW           1
+  //  Overflow detected in correlation process associated with a reference
+  //  acquisition
+
+
+  #define SIG_OVERFLOW          2
+  //  Overflow detected in correlation process associated with a signal
+  //  acquisition
+
+
+  #define SIGNAL_NOT_VALID      3
+  //  Indicates that the signal correlation peak is equal to or below
+  //  correlation record noise threshold
+
+
+  #define SECOND_RETURN         4
+  //  Secondary return detected above correlation noise floor threshold
+
+
+  #define VELOCITY_COMPLETE     5
+  //  Velocity measurement completed
+
+
+  #define EXT_TRIG_COMPLETE     6
+  //  External measurement performed
+
+
+  #define EYE_SAFE              7
+  //  This bit will go high if eye-safety protection has been activated
 
 /*
 NOTE: Health status (BIT 1) indicates that the preamp is operating properly,
@@ -84,7 +127,13 @@ transmit power is active and a reference pulse has been processed and stored.
 
 #define LIDAR_MAX_COUNT     0x2   // Register Address
 
-//  Bits 0 - 7  Maximum Acquisition Count - 0-255. Control the FPGA maximum signal integration time. Stronger signal results in reduced acquisition count to prevent internal register overflow. Sig overflow flag and Ref overflow flag in control register 1 are set  when automatic limiting occurs.
+/*  Bits 0-7:
+  Maximum Acquisition Count - 0-255. Control the FPGA maximum signal integration
+  time. Stronger signal results in reduced acquisition count to prevent
+  internal register overflow.
+  Sig overflow flag and Ref overflow flag in control register 1 are set when
+  automatic limiting occurs.
+*/
 
 
 /*------------------------END REGISTER------------------------*/
@@ -95,17 +144,29 @@ transmit power is active and a reference pulse has been processed and stored.
 /*           CORRELATION RECORD LENGTH REGISTER               */
 /*                    control_reg[0x3]                        */
 /*                     (READ & WRITE)                         */
+/*                      default 0x21                          */
 /**************************************************************/
 
 // control_reg[0x51] is WRITE only version of register
 
 #define LIDAR_CORR_LENGTH   0x3   // Register Address
+
   /*Bit definitions*/
-  #define CORR_START_ADDR   0      // BITS 0-4: Value in the range from 0x00-0x0f – starting point in correlation record (record broken into 64 element segments 1024 total (Default 0x1 corresponding to 64)
-  #define CORR_STOP_ADDR    4     // Value in the range from 0x00-0x0f – stopping point in correlation record (Default 0x8 (bit 5) corresponding to 512)
+  #define CORR_START_ADDR   0
+  /*  BITS 0-3:
+      Value in the range from 0x00-0x0f – starting point in correlation record
+      (record broken into 64 element segments 1024 total
+      Default 0x1 corresponding to 64
+  */
+
+  #define CORR_STOP_ADDR    4
+  /*  BITS 4-7:
+      Value in the range from 0x00-0x0f – stopping point in correlation record
+      Default 0x2 (bit 5) corresponding to 512
+  */
 
 /*
-Note: With longer correlation records, burst pulse period is
+NOTE: With longer correlation records, burst pulse period is
 roughly proportional to the length of the  correlation record.
 Unnecessarily long record length increases the probability of
 false detections.
@@ -123,17 +184,44 @@ false detections.
 /**************************************************************/
 
 
-#define LIDAR_MODE          0x4   // Acquisition mode control
+#define LIDAR_MODE          0x4   // Register Address
 
   /*Bit definitions*/
-  #define PREAMP_OFF          0   //Shutdown preamp between measurements
-  #define CLK_SHUT            1   //External Clock Shutdown – Not used in standard LidarLite
-  #define FPGA_SLEEP          2   // Full FPGA sleep after measurement
-  #define DET_OFF             3   // Turns off detector bias after measurement
-  // bit 4 not currently used
-  #define V_SCALE             5   // “1” sets the velocity measurement separation to 10msec resulting in a velocity calibration in meters/sec. A “0” value results  in a measurement separation of 100msec.
-  #define REF_INHIBIT         6   // If “1” inhibits the acquisition of reference pulses reducing measurement times and reducing measurement variations at the  expense of decreasing accuracy over time. “0” allows normal operation
-  #define V_ENABLE            7   // Enable velocity measurement
+
+  #define PREAMP_OFF          0
+  // Shutdown preamp between measurements
+
+/*------------NOT USED IN STANDARD LIDAR LIGHT----------- */
+/*                                                        */
+  #define CLK_SHUT            1
+/*  // External Clock Shutdown                            */
+/*                                                        */
+/*------------NOT USED IN STANDARD LIDAR LIGHT----------- */
+
+
+  #define FPGA_SLEEP          2
+  // Full FPGA sleep after measurement
+
+  #define DET_OFF             3
+  // Turns off detector bias after measurement
+
+  // BIT 4 not currently used
+
+
+  #define V_SCALE             5
+  //  “1” sets the velocity measurement separation to 10msec resulting in a
+  //  velocity calibration in meters/sec. A “0” value results  in a measurement
+  //  separation of 100msec.
+
+
+  #define REF_INHIBIT         6
+  //  “1” inhibits the acquisition of reference pulses reducing measurement
+  //  times and reducing measurement variations at the  expense of decreasing
+  //  accuracy over time. “0” allows normal operation
+
+
+  #define V_ENABLE            7
+  // Enable velocity measurement
 
 /*------------------------END REGISTER------------------------*/
 
@@ -146,9 +234,13 @@ false detections.
 /*                      nominal 128                           */
 /**************************************************************/
 
-#define LIDAR_THOLD_OFFSET  0x5   // Measured threshold offset during acquisition
+#define LIDAR_THOLD_OFFSET  0x5       // Register Address
 
-// BITS 0-7 Measured DC value out of correlation sampler input. Value based on the ratio of 1’s and 0’s (read only) preamp (Parameter used as part of health flag criteria)
+/*  BITS 0-7:
+    Measured DC value out of correlation sampler input. Value based on the
+    ratio of 1’s and 0’s (read only) preamp
+    (Parameter used as part of health flag criteria)
+*/
 
 /*------------------------END REGISTER------------------------*/
 
@@ -160,9 +252,10 @@ false detections.
 /*                       (READ ONLY)                          */
 /**************************************************************/
 
-#define LIDAR_REF_DELAY_H   0x6
+#define LIDAR_REF_DELAY_H   0x6       // Register Address
 // BITS 0-7: Measured delay of reference in correlation record (HIGH byte)
-#define LIDAR_REF_DELAY_L   0x7
+
+#define LIDAR_REF_DELAY_L   0x7       // Register Address
 // BITS 0-7: Measured delay of reference in correlation record (LOW byte)
 
 /*------------------------END REGISTER------------------------*/
@@ -175,8 +268,11 @@ false detections.
 /*                       (READ ONLY)                          */
 /**************************************************************/
 
-#define LIDAR_REF_PEAK      0x8   // Reference correlation measured peak value
-  //BITS 0-7: Correlation Peak value reference (scaled to 0 – 0xff max peak value) - (read only) – Parameter used as part of health flag criteria
+#define LIDAR_REF_PEAK      0x8       // Register Address
+  /*  BITS 0-7:
+      Correlation Peak value reference scaled to 0 – 0xff max peak value
+      (Parameter used as part of health flag criteria)
+  */
 
 
 /*------------------------END REGISTER------------------------*/
@@ -189,8 +285,12 @@ false detections.
 /*                       (READ ONLY)                          */
 /**************************************************************/
 
-#define LIDAR_VELOCITY_READ 0x9
-// BITS 0-7: Velocity in .1 meters/sec - (read only, 8 bit signed value) See Mode control, Register 4 for information on changing the  scale factor to 1m/sec
+#define LIDAR_VELOCITY_READ 0x9       // Register Address
+  /*  BITS 0-7:
+      Velocity in .1 meters/sec - (8 bit signed value)
+      See Mode control, Register 4 for information on changing the
+      scale factor to 1m/sec
+  */
 
 /*------------------------END REGISTER------------------------*/
 
@@ -202,10 +302,13 @@ false detections.
 /*                       (READ ONLY)                          */
 /**************************************************************/
 
-#define LIDAR_CORR_DELAY_H  0xa
-// BITS 0-7: Measured delay of signal return in correlation record (HIGH byte)
-#define LIDAR_CORR_DELAY_L  0xb
-// BITS 0-7: Measured delay of signal return in correlation record (LOW byte)
+#define LIDAR_CORR_DELAY_H  0xa       // Register Address
+//  BITS 0-7:
+//  Measured delay of signal return in correlation record (HIGH byte)
+
+#define LIDAR_CORR_DELAY_L  0xb       // Register Address
+//  BITS 0-7:
+//  Measured delay of signal return in correlation record (LOW byte)
 
 /*------------------------END REGISTER------------------------*/
 
@@ -217,8 +320,11 @@ false detections.
 /*                       (READ ONLY)                          */
 /**************************************************************/
 
-#define LIDAR_CORR_PEAK     0xc
-// BITS 0-7: Correlation Peak value of signal correlation (scaled to 0 – 0xff max peak value)
+#define LIDAR_CORR_PEAK     0xc       // Register Address
+  /*  BITS 0-7:
+      Correlation Peak value of signal correlation
+      (scaled to 0 – 0xff max peak value)
+  */
 
 /*------------------------END REGISTER------------------------*/
 
@@ -230,8 +336,9 @@ false detections.
 /*                        (READ ONLY)                         */
 /**************************************************************/
 
-#define LIDAR_CORR_NOISE    0xd
-// BITS 0-7: Correlation record noise floor * 1.25 (for setting valid signal threshold)
+#define LIDAR_CORR_NOISE    0xd       // Register Address
+//  BITS 0-7:
+//  Correlation record noise floor * 1.25 (for setting valid signal threshold)
 
 /*------------------------END REGISTER------------------------*/
 
@@ -243,11 +350,13 @@ false detections.
 /*                        (READ ONLY)                         */
 /**************************************************************/
 
-#define LIDAR_SIG_STRENGTH  0xe
-// BITS 0-7: Calculated signal strength (typical range 10 min - 128 maximum)
+#define LIDAR_SIG_STRENGTH  0xe       // Register Address
+//  BITS 0-7:
+//  Calculated signal strength (typical range 10 min - 128 maximum)
 
 /*
-Note: calculation based on the number of averaged samples and correlation peak value
+NOTE: Calculation based on the number of averaged samples and
+      correlation peak value.
 */
 
 /*------------------------END REGISTER------------------------*/
@@ -261,9 +370,17 @@ Note: calculation based on the number of averaged samples and correlation peak v
 /**************************************************************/
 
 
-#define LIDAR_DIST_READ_H   0xf   // BITS 0-7: Calculated distance in cm (difference between signal and reference delay) (HIGH Byte) Note: if the MSB is 1 then the reading is NOT considered valid.
-#define LIDAR_DIST_READ_L   0x10  // BITS 0-7: Calculated distance in cm (difference between signal and reference delay) (LOW Byte)
-#define LIDAR_DIST_READ_HL  0x8f  // Two byte read == LIDAR_DIST_READ_H << 8 | LIDAR_DIST_READ_L
+#define LIDAR_DIST_READ_H   0xf     //  HIGH Byte Register Address
+//  BITS 0-7:
+//  Calculated distance in cm (difference between signal and reference delay)
+//  NOTE: if the MSB is 1 then the reading is NOT considered valid.
+
+#define LIDAR_DIST_READ_L   0x10    //  LOW Byte Register Address
+//  BITS 0-7:
+//  Calculated distance in cm (difference between signal and reference delay)
+
+#define LIDAR_DIST_READ_HL  0x8f    // 16-bit Distance in cm.
+// Two byte read == LIDAR_DIST_READ_H << 8 | LIDAR_DIST_READ_L
 
 /*------------------------END REGISTER------------------------*/
 
@@ -275,7 +392,11 @@ Note: calculation based on the number of averaged samples and correlation peak v
 /*                     (READ & WRITE)                         */
 /**************************************************************/
 
-#define LIDAR_DC_THRESHOLD  0x11  // BITS 0-7: The required DC compensation command value to maintain zero crossing offset at preamp – Parameter  used as part of health flag criteria
+#define LIDAR_DC_THRESHOLD  0x11      // Register Address
+//  BITS 0-7:
+//  The required DC compensation command value to maintain zero crossing offset
+//  at preamp.
+//  (Parameter  used as part of health flag criteria)
 
 /*------------------------END REGISTER------------------------*/
 
@@ -287,8 +408,10 @@ Note: calculation based on the number of averaged samples and correlation peak v
 /*                       (WRITE ONLY)                         */
 /**************************************************************/
 
-#define LIDAR_BURST_DELAY   0x12
-// BITS 0-7: Added delay between signal bursts – Used to lower transmission duty cycle and pulse frequency
+#define LIDAR_BURST_DELAY   0x12      // Register Address
+// BITS 0-7:
+// Added delay between signal bursts.
+// Used to lower transmission duty cycle and pulse frequency
 
 /*------------------------END REGISTER------------------------*/
 
@@ -300,8 +423,9 @@ Note: calculation based on the number of averaged samples and correlation peak v
 /*                      (READ & WRITE)                        */
 /**************************************************************/
 
-#define LIDAR_DISTANCE_CAL  0x13
-// BITS 0-7: Distance calibration. Signed 8 bit value adds or subtracts from distance
+#define LIDAR_DISTANCE_CAL  0x13      // Register Address
+//  BITS 0-7:
+//  Distance calibration. Signed 8 bit value adds or subtracts from distance
 
 /*------------------------END REGISTER------------------------*/
 
@@ -313,10 +437,13 @@ Note: calculation based on the number of averaged samples and correlation peak v
 /*                        (READ ONLY)                         */
 /**************************************************************/
 
-#define LIDAR_PREV_DIST_H   0x14
-  // BITS 0-7: Previous measured distance (HIGH Byte)
-#define LIDAR_PREV_DIST_L   0x15
-  // BITS 0-7: Previous measured distance (LOW Byte)
+#define LIDAR_PREV_DIST_H   0x14      // Register Address
+  //  BITS 0-7:
+  //  Previous measured distance (HIGH Byte)
+
+#define LIDAR_PREV_DIST_L   0x15      // Register Address
+  //  BITS 0-7:
+  //  Previous measured distance (LOW Byte)
 
 /*------------------------END REGISTER------------------------*/
 
@@ -331,48 +458,53 @@ Note: calculation based on the number of averaged samples and correlation peak v
 /*                       (WRITE ONLY)                         */
 /**************************************************************/
 
-#define LIDAR_CMD_CTRL      0x40    // Command Control
+#define LIDAR_CMD_CTRL      0x40    // Register Address
 
 /*
 BITS 0-2: Starting action address
-_____________________________________________________
-VALUE     |       DESCRITPTION                       |
------------------------------------------------------
- ￼000      | No Operation                             |
------------------------------------------------------
-￼ 001      | Start processes at template store        |
------------------------------------------------------
- 010      | Start processes at signal acquisition    |
------------------------------------------------------
- 011      | Start processes at clear correlation     |
-          | memory                                   |
------------------------------------------------------
- 100      | Start processes at Perform Correlation   |
-          | process                                  |
------------------------------------------------------
- 101      | Start processes at Delay calculation     |
-          | processing                               |
------------------------------------------------------
- 110      | Perform only memory bank access enable   |
------------------------------------------------------
- 111      | Perform only correlation record filtering|
------------------------------------------------------
+______________________________________________________
+VALUE    |       DESCRITPTION                        |
+------------------------------------------------------
+ ￼000     | No Operation                              |
+------------------------------------------------------
+￼ 001     | Start processes at template store         |
+------------------------------------------------------
+ 010     | Start processes at signal acquisition     |
+------------------------------------------------------
+ 011     | Start processes at clear correlation      |
+         | memory                                    |
+------------------------------------------------------
+ 100     | Start processes at Perform Correlation    |
+         | process                                   |
+------------------------------------------------------
+ 101     | Start processes at Delay calculation      |
+         | processing                                |
+------------------------------------------------------
+ 110     | Perform only memory bank access enable    |
+------------------------------------------------------
+ 111     | Perform only correlation record filtering |
+------------------------------------------------------
 */
 
 //BIT 3
-  #define STORE_TEMPLATE      3 // Store template pattern enable
+  #define STORE_TEMPLATE      3
+  // Store template pattern enable
 
 //BIT 4
-  #define SIGNAL_AQ_ENABLE    4 // Signal acquisition enable
+  #define SIGNAL_AQ_ENABLE    4
+  // Signal acquisition enable
 
 //BIT 5
-  #define CLR_CORR_MEM        5 // Clear Correlation Memory
+  #define CLR_CORR_MEM        5
+  // Clear Correlation Memory
 
 //BIT 6
-  #define RUN_CORR            6 // Perform Correlation process
+  #define RUN_CORR            6
+  // Perform Correlation process
 
 //BIT 7
-  #define RUN_DELAY_CALC      7 // Perform Delay calculation Processing
+  #define RUN_DELAY_CALC      7
+  // Perform Delay calculation Processing
 
 /*
 NOTE: Command control register - Writing to this register
@@ -391,10 +523,11 @@ only at the completion of defining other registers.
 /*                       (READ ONLY)                          */
 /**************************************************************/
 
-#define LIDAR_HW_VER        0x41    // Hardware Version
+#define LIDAR_HW_VER        0x41    // Register Address
 /*
-BITS 0-7: Laser units revisions begin with 0x01 (short range),
-          0x20 for long range lasers, and led units begin with 0x40
+  BITS 0-7:
+  Laser units revisions begin with 0x01 (short range),
+  0x20 for long range lasers, and led units begin with 0x40.
 */
 
 /*------------------------END REGISTER------------------------*/
@@ -407,8 +540,9 @@ BITS 0-7: Laser units revisions begin with 0x01 (short range),
 /*                        (WRITE ONLY)                        */
 /**************************************************************/
 
-#define LIDAR_PREAMP_CTRL   0x42
-//BITS 0-7:  Preamp DC control 0-255 – used in DC compensation servo loop
+#define LIDAR_PREAMP_CTRL   0x42      // Register Address
+//  BITS 0-7:
+//  Preamp DC control 0-255 – used in DC compensation servo loop
 
 
 /*------------------------END REGISTER------------------------*/
@@ -422,9 +556,11 @@ BITS 0-7: Laser units revisions begin with 0x01 (short range),
 /*                        default 0x69                        */
 /**************************************************************/
 
-#define LIDAR_TX_PWR_CTRL   0x43
-  // BITS 0-3: Signal laser or led power level control (0x00-0x0f)
-  // BITS 4-7: Reference  led power level control (0x00-0x0f)
+#define LIDAR_TX_PWR_CTRL   0x43      // Register Address
+  //  BITS 0-3:
+  //  Signal laser or led power level control (0x00-0x0f)
+  //  BITS 4-7:
+  //  Reference  led power level control (0x00-0x0f)
 
 /* NOTE: Maximum value set at factory 1amp LED and 3amps Laser
          product. The maximum output power of the optical source
@@ -447,12 +583,32 @@ BITS 0-7: Laser units revisions begin with 0x01 (short range),
 /**************************************************************/
 
 
-#define LIDAR_GATE_L        0x44    // Processing range gate (low byte)
-#define LIDAR_GATE_H        0x45    // Processing range gate (high byte)
+#define LIDAR_GATE_L        0x44      // Register Address
+//  BITS 0-7:
+//  Processing range gate (LOW byte)
+#define LIDAR_GATE_H        0x45      // Register Address
+//  BITS 0-7:
+//  Processing range gate (HIGH byte)
+
+// Sets the staring location for range processing in the correlation
+
+/*------------------------END REGISTER------------------------*/
 
 
 
-#define LIDAR_PWM_MODE      0x46    // Range Measurement PWM output pin bit[0] used
+/**************************************************************/
+/*               TRANSMIT POWER CONTROL REGISTER              */
+/*                     control_reg[0x43]                      */
+/*                        (WRITE ONLY)                        */
+/*                        default 0x69                        */
+/**************************************************************/
+
+#define LIDAR_PWM_MODE      0x46      // Register Address
+//  BIT 1:
+//  Single bit passed from microcontroller PWM output. High at mode pin returns
+//  pulse width proportional distance
+
+
 #define LIDAR_READ_STATUS   0x47    // Acquisition status
 #define LIDAR_DC_OFFSET     0x49    // Measured preamp DC offset
 #define LIDAR_OUTPUT_PORT   0x4a    // Output port
