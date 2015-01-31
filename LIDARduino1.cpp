@@ -46,12 +46,16 @@ void LIDAR_Lite_I2C::begin( void ){
   I2c.begin();
   delay(100);
   I2c.timeOut(50);
-
+  reset();
 }
 
-int16_t LIDAR_Lite_I2C::getDistance( void ){
+void LIDAR_Lite_I2C::reset( void ){
+  _overWriteI2C( LIDAR_COMMAND, (1<<RESET_FPGA) );
+}
 
-  _triggerRead();
+int16_t LIDAR_Lite_I2C::getDistance( LL_READ_MODE_E e ){
+
+  _triggerRead( e );
 
   uint8_t readAry[2];
   _readI2C(LIDAR_DIST_READ_HL, 2, readAry);
@@ -70,7 +74,7 @@ Get raw velocity readings from sensor and convert to signed int
 
 
 int16_t LIDAR_Lite_I2C::getVelocity( void ){
-  _triggerRead();
+  _triggerRead(LL_DC);
   uint8_t read = _readI2C(LIDAR_VELOCITY_READ);
 
   return((int)((char)read));
@@ -106,6 +110,23 @@ uint8_t LIDAR_Lite_I2C::getHWversion( void ) {
 uint8_t LIDAR_Lite_I2C::getSWversion( void ){
 
   return _readI2C( LIDAR_SW_VER );
+}
+
+uint8_t LIDAR_Lite_I2C::getStatus( void ){
+  return _readI2C( LIDAR_SYS_STATUS );
+}
+
+uint8_t LIDAR_Lite_I2C::getRSSI( void ){
+  return _readI2C( LIDAR_SIG_STRENGTH );
+}
+
+uint8_t LIDAR_Lite_I2C::getMaxCount( void ){
+  return _readI2C( LIDAR_MAX_COUNT );
+}
+
+void LIDAR_Lite_I2C::setMaxCount( uint8_t count ){
+  _overWriteI2C( LIDAR_MAX_COUNT, count );
+
 }
 
 
