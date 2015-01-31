@@ -394,9 +394,9 @@ NOTE: Calculation based on the number of averaged samples and
 
 #define LIDAR_DC_THRESHOLD  0x11      // Register Address
 //  BITS 0-7:
-//  The required DC compensation command value to maintain zero crossing offset
-//  at preamp.
-//  (Parameter  used as part of health flag criteria)
+//  The required DC compensation command value to maintain zero 
+//  crossing offset at preamp.
+//  (Parameter used as part of health flag criteria)
 
 /*------------------------END REGISTER------------------------*/
 
@@ -583,10 +583,11 @@ only at the completion of defining other registers.
 /**************************************************************/
 
 
-#define LIDAR_GATE_L        0x44      // Register Address
+ #define LIDAR_GATE_L        0x44      // Register Address
 //  BITS 0-7:
 //  Processing range gate (LOW byte)
-#define LIDAR_GATE_H        0x45      // Register Address
+
+ #define LIDAR_GATE_H        0x45      // Register Address
 //  BITS 0-7:
 //  Processing range gate (HIGH byte)
 
