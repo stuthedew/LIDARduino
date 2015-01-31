@@ -80,6 +80,8 @@ int16_t LIDAR_Lite_I2C::getVelocity( void ){
   return((int)((char)read));
 }
 
+
+
 int16_t LIDAR_Lite_I2C::easyVelocity( void ){
   enableVelocity( LL_10_MS );
   int velocity = getVelocity();
