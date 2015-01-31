@@ -597,21 +597,115 @@ only at the completion of defining other registers.
 
 
 /**************************************************************/
-/*               TRANSMIT POWER CONTROL REGISTER              */
-/*                     control_reg[0x43]                      */
+/*                  PWM RANGE OUTPUT REGISTER                 */
+/*                     control_reg[0x46]                      */
 /*                        (WRITE ONLY)                        */
-/*                        default 0x69                        */
 /**************************************************************/
 
 #define LIDAR_PWM_MODE      0x46      // Register Address
-//  BIT 1:
-//  Single bit passed from microcontroller PWM output. High at mode pin returns
-//  pulse width proportional distance
+
+/*  BIT 1:
+    Single bit passed from microcontroller PWM output. High at mode pin
+    returns pulse width proportional distance.
+*/
+/*------------------------END REGISTER------------------------*/
 
 
-#define LIDAR_READ_STATUS   0x47    // Acquisition status
-#define LIDAR_DC_OFFSET     0x49    // Measured preamp DC offset
+
+/**************************************************************/
+/*                AQUISITION STATUS REGISTER                  */
+/*                     control_reg[0x47]                      */
+/*                        (READ ONLY)                         */
+/**************************************************************/
+
+#define LIDAR_READ_STATUS   0x47    // Register Address
+
+/*Bit Definitions*/
+
+  #define BUSY              0
+  /*  Busy, indicates that the processor is actively performing an
+      acquisition process.  */
+
+  #define REF_OVRFLOW_EXT   1
+  /*  Overflow detected in correlation process associated with the
+      reference  acquisition */
+
+  #define SIG_OVRFLOW_EXT   2
+  /*  Overflow detected in correlation process associated with the
+      signal  acquisition */
+
+  #define PIN_STATUS        3
+  /*  Indicates the state of the Mode Select external pin.
+      De-bounced, masked from output signals, inverted  */
+
+  #define SECOND_PEAK       4
+  /*  Indicates a second peak was detected. 2nd peak value compared to
+      noise floor    */
+
+  #define TIMESTAMP         5
+  /*  Active between velocity measurement pairs   */
+
+  #define SIGNAL_INVALID    6
+  /* "1" No signal detected. "0" Signal detected. */
+
+  #define EYE_SAFE_EXT      7
+  /*  ￼Indicates that eye safety average power limit has been exceeded
+      and power reduction is in place.    */
+
+  /*------------------------END REGISTER------------------------*/
+
+
+  // REGISTER 0x48 NOT USED
+
+
+/**************************************************************/
+/*                AQUISITION STATUS REGISTER                  */
+/*                     control_reg[0x49]                      */
+/*                        (READ ONLY)                         */
+/**************************************************************/
+
+
+#define LIDAR_DC_OFFSET     0x49    // Register Address
+
+  /*  BIT 0-7:
+      Measured DC value out of correlation sampler input. Value
+      based on the ratio of 1’s and 0’s.
+  */
+
+/*------------------------END REGISTER------------------------*/
+
+
+
+/**************************************************************/
+/*                    OUTPUT PORT REGISTER                    */
+/*                     control_reg[0x4a]                      */
+/*                       (WRITE ONLY)                         */
+/**************************************************************/
+
 #define LIDAR_OUTPUT_PORT   0x4a    // Output port
+
+/*  BIT DEFINITIONS:  */
+
+  #define XMT_1_EN          0
+  //  Enables transmit channel 1 high-side current source
+
+  #define XMT_2_EN          1
+  //  Enables transmit channel 2 high-side current source
+
+  #define PREAMP_GAIN       2
+  //  Selects high 2x or low gain 1x setting - NOT USED BY LIDAR LITE
+
+  #define DETECTOR_SEL      3
+  //  Select reveiver detector 1 or 2 - NOT USED BY LIDAR LITE
+
+  #define BUSY_FLAG         4
+  /*  Busy flag outputs on mode select pin with I2C initiated acquisition.
+      High causes pin output to be driven low  */
+
+
+/*------------------------END REGISTER------------------------*/
+
+
 #define LIDAR_TWO_ECHO      0x4b    // Range Processing Criteria for two echoes. Max signal, Max/Min Range.
 #define LIDAR_NXT_LG_PEAK   0x4c    // 2nd largest detected peak in signal correlation record.
 #define LIDAR_SW_VER        0x4f    // Software Version.
