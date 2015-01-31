@@ -30,6 +30,16 @@ typedef enum{
 
 } LL_V_RESOLUTION_E;
 
+typedef union{
+
+struct{
+  unsigned int
+    low:4 ,
+    hi:4  ;
+  } nib;
+  uint8_t full;
+}reg_u;
+
 class LIDAR_Lite{
   public:
     virtual void
@@ -88,19 +98,25 @@ public:
     begin( void ) ;
 
   int16_t
-    getDistance( void ) , // return distance in cm.
+    getDistance( LL_READ_MODE_E e = LL_DC ) , // return distance in cm.
     getVelocity( void ) ,
     easyDistance( void ) ,
-    easyVelocity( void );
+    easyVelocity( void ) ;
+
 
 
   uint8_t
     getHWversion( void ) , // laser units revisions begin with 0x01 (short range ), 0x20 for long range lasers, and Led units begin with 0x40
-    getSWversion( void ) ; // laser units revisions begin with 0x01 (short range ), 0x20 for long range lasers, and Led units begin with 0x40
+    getSWversion( void ) , // laser units revisions begin with 0x01 (short range ), 0x20 for long range lasers, and Led units begin with 0x40
+    getStatus( void ),
+    getRSSI( void ) ,
+    getMaxCount( void ) ;
 
   void
     enableVelocity( LL_V_RESOLUTION_E e) ,
-    disableVelocity( void ) ;
+    disableVelocity( void ),
+    setMaxCount( uint8_t count ),
+    reset( void ) ;
 
 
   /***********PRIVATE*************************/
@@ -115,7 +131,7 @@ private:
     _overWriteI2C( uint8_t regAddress, uint8_t value );
 
   inline void
-    _triggerRead( LL_READ_MODE_E e = LL_DC ) ;
+    _triggerRead( LL_READ_MODE_E e ) ;
 
 
   uint8_t const
