@@ -682,7 +682,7 @@ only at the completion of defining other registers.
 /*                       (WRITE ONLY)                         */
 /**************************************************************/
 
-#define LIDAR_OUTPUT_PORT   0x4a    // Output port
+#define LIDAR_OUTPUT_PORT   0x4a    // Register Address
 
 /*  BIT DEFINITIONS:  */
 
@@ -706,11 +706,89 @@ only at the completion of defining other registers.
 /*------------------------END REGISTER------------------------*/
 
 
-#define LIDAR_TWO_ECHO      0x4b    // Range Processing Criteria for two echoes. Max signal, Max/Min Range.
-#define LIDAR_NXT_LG_PEAK   0x4c    // 2nd largest detected peak in signal correlation record.
-#define LIDAR_SW_VER        0x4f    // Software Version.
-#define LIDAR_CORR_SIZE     0x51    // Correlation record size select – (reference and signal return)
+
+/**************************************************************/
+/*           TWO-PEAK PROCESSING CRITERIA REGISTER            */
+/*                     control_reg[0x4b]                      */
+/*                        (WRITE ONLY)                        */
+/*                        default 0x00                        */
+/**************************************************************/
+
+#define LIDAR_TWO_ECHO      0x4b    // Register Address
+
+/*  BIT DEFINITIONS:  */
+
+  #define SELECT_SECOND         0
+/*  Controls echo processing selection: ”1” switches to alternative
+    return; “0” Selects data associated with detection criteria   */
+
+  #define SELECT_CRITERIA       1
+/*  “1” selects return data based on distance; “0” selects strongest
+    return, regardless of distance  */
+
+  #define SELECT_DISTANCE       2
+/*  “1” selects the longer distance; “0” selects the shorter distance
+*/
+
+/*------------------------END REGISTER------------------------*/
+
+
+
+
+/**************************************************************/
+/*               SECOND LARGEST PEAK REGISTER                 */
+/*                     control_reg[0x4c]                      */
+/*                        (READ ONLY)                         */
+/**************************************************************/
+
+#define LIDAR_NXT_LG_PEAK   0x4c    // Register Address
+
+  /*  BITS 0-7:
+      Peak Value of 2nd largest pulse in the signal correlation
+      record.
+  */
+
+/*------------------------END REGISTER------------------------*/
+
+
+
+
+/**************************************************************/
+/*                 SOFTWARE VERSION REGISTER                  */
+/*                     control_reg[0x4f]                      */
+/*                       (READ ONLY)                          */
+/**************************************************************/
+
+#define LIDAR_SW_VER        0x4f    // Register Address
+/*
+  BITS 0-7:
+  Laser units revisions begin with 0x01 (short range),
+  0x20 for long range lasers, and led units begin with 0x40.
+*/
+
+/*------------------------END REGISTER------------------------*/
+
+
+// REGISTER 0x50 NOT USED
+
+
+/**************************************************************/
+/*           CORRELATION RECORD LENGTH REGISTER               */
+/*                   control_reg[0x51]                        */
+/*                        (WRITE)                             */
+/*                      default 0x21                          */
+/**************************************************************/
+
+#define LIDAR_CORR_SIZE_EXT 0x51
+
+//  SEE control_reg[0x4] for more information. control_reg[0x51]
+//  is write-only version of control_reg[0x4].
+
+/*------------------------END REGISTER------------------------*/
+
+
 #define LIDAR_CORR_DATA_L   0x52    // Correlation Data access port (low byte)
+
 #define LIDAR_READ_SETTINGS 0x53    // Acquisition Settings – selects ext. memory access, signal record select
 #define LIDAR_READ_DELAY_H  0x57    // Measured delay of reference or signal in correlation window
 #define LIDAR_READ_DELAY_L  0x58    // Measured delay of reference or signal in correlation window
