@@ -42,6 +42,32 @@ LIDAR_Lite_I2C::LIDAR_Lite_I2C( uint8_t i2cAddr ):_I2CAddress( i2cAddr ){
 
 }
 
+dump_error_t LIDAR_Lite::correlationDump(Stream *s, uint8_t startAddress, uint8_t stopAddress ){
+  if(startAddress < 0 || startAddress > stopAddress){
+    return dump_min_bounds;
+  }
+  if(stopAddress > 0xF){
+    return dump_max_bounds;
+  }
+
+  uint8_t newAddresses = startAddress | stopAddress << 4;
+
+  _overWriteI2C( LIDAR_CORR_SIZE_EXT, newAddresses ); // set read addresses
+  _overWriteI2C( LIDAR_CMD_CTRL, ); //TODO: Figure out bank number
+
+  uint16_t elements = stopAddress - startAddress + 1 ; // 1 indexed record
+  elements >>= 7 ; // multiply by 64 (address )
+  for(int i = 0; i < elements; i++){
+
+    //TODO: Read from LIDAR
+
+    delay(1); // don't overrun stream output
+  }
+
+  return dump_success;
+
+}
+
 void LIDAR_Lite_I2C::begin( void ){
   I2c.begin();
   delay(100);

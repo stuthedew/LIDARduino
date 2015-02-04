@@ -30,6 +30,14 @@ typedef enum{
 
 } LL_V_RESOLUTION_E;
 
+typedef enum{
+  dump_success = 0,
+  dump_min_bounds,
+  dump_max_bounds,
+  dump_timeout
+
+} dump_error_t;
+
 typedef union{
 
 struct{
@@ -46,34 +54,12 @@ class LIDAR_Lite{
       begin()=0;
 
     void
-      enablePowerCtrl( uint8_t powerPin ) ; // allow for multiple sensors on one I2C bus or PWM pin.
+      enablePowerCtrl( uint8_t powerPin ) , // allow for multiple sensors on one I2C bus or PWM pin.
+      correlationDump( Stream* s, uint8_t startAddress=0, uint8_t stopAddress=0x10 );
+
     bool
       power( bool state ) ,
       powerStatus( void ) const ;
-
-      /*Example
-        #define NUM_SENSORS 4  //Number of LIDAR_Lites to read.
-        LIDAR_Lite_I2C sensors[ NUM_SENSORS ]; // Could be LIDAR_Lite_PWM also
-        uint8_t sensorPwrPins[] = {6, 7, 8, 9}; // Hook up each arduino pin to each PWR_EN wire of LIDAR Lites (PWR_EN wire adjacent to Red 5V wire ) using 1K - 10K resistor in series.
-
-        for(int i = 0; i < NUM_SENSORS; i++){ // disable all sensors
-          sensors[i].begin();
-          sensors[i].enablePowerCtrl( sensorPwrPins[i] );
-          sensors[i].power(0);
-        }
-
-        for(int i = 0; i < NUM_SENSORS; i++){ // Read from each sensor individually
-          sensors[i].power(1); //enable individual sensor
-
-          Serial.print(F( Sensor  ));
-          Serial.print(i);
-          Serial.print(F(  Distance Reading:  ));
-          Serial.print(sensors[i].getDistance());
-          Serial.println(F( cm ));
-
-          sensors[i].power(0); //disable individual sensor
-        }
-      */
 
 
   private:
@@ -117,6 +103,8 @@ public:
     disableVelocity( void ),
     setMaxCount( uint8_t count ),
     reset( void ) ;
+
+
 
 
   /***********PRIVATE*************************/
